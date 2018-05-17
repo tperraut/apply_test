@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">apply_test</string>
+    <string name="add_item_bt_name">plus</string>
+    <string name="remove_item_bt_name">minus</string>
+    <string name="item_description">Succes Startup</string>
+    <string name="item_title">Geronimo !</string>
+    <string name="item_image_description">Nice pic</string>
+    <string name="item_details_bt">details</string>
+    <string name="item_share_bt">Share</string>
 </resources>
