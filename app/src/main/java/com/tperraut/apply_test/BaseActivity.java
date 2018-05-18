@@ -1,9 +1,7 @@
 package com.tperraut.apply_test;
 
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -22,14 +20,11 @@ public class BaseActivity extends AppCompatActivity implements BaseAdapter.Liste
     private ArrayList<String> mDescritpions = new ArrayList<>();
     private ArrayList<Drawable> mImages = new ArrayList<>();
 
-
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP) //TODO remove
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_base);
         mRecyclerView = findViewById(R.id.item_list);
-        mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
         initDataSet();
@@ -37,12 +32,11 @@ public class BaseActivity extends AppCompatActivity implements BaseAdapter.Liste
         mRecyclerView.setAdapter(mAdapter);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP) //TODO remove
     private void initDataSet() {
         for (int i = 1; i <= 10; i ++) {
             mTitles.add("" + i);
             mDescritpions.add("" + i);
-            mImages.add(getDrawable(R.drawable.geronimo_logo));
+            //mImages.add(getDrawable(R.drawable.geronimo_logo));
         }
     }
 

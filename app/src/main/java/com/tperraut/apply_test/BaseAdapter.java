@@ -2,6 +2,7 @@ package com.tperraut.apply_test;
 
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,7 +34,7 @@ public class BaseAdapter extends RecyclerView.Adapter<BaseAdapter.ViewHolder> {
         this.mImages = images;
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.item_image)
         ImageView mImage;
         @BindView(R.id.item_title)
@@ -41,9 +42,9 @@ public class BaseAdapter extends RecyclerView.Adapter<BaseAdapter.ViewHolder> {
         @BindView(R.id.item_description)
         TextView mDescription;
         @BindView(R.id.item_details_bt)
-        Button mDetailsBt;
+        TextView mDetailsBt;
         @BindView(R.id.item_share_bt)
-        Button mShareBt;
+        TextView mShareBt;
 
         public ViewHolder(View v) {
             super(v);
@@ -64,7 +65,7 @@ public class BaseAdapter extends RecyclerView.Adapter<BaseAdapter.ViewHolder> {
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.mTitle.setText(mTitles.get(position));
         holder.mDescription.setText(mDescriptions.get(position));
-        holder.mImage.setImageDrawable(mImages.get(position));
+        //holder.mImage.setImageDrawable(mImages.get(position));
         holder.mDetailsBt.setOnClickListener(mListener);
         holder.mShareBt.setOnClickListener(mListener);
     }

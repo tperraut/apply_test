@@ -5,6 +5,6 @@
     <string name="item_description">Succes Startup</string>
     <string name="item_title">Geronimo !</string>
     <string name="item_image_description">Nice pic</string>
-    <string name="item_details_bt">details</string>
-    <string name="item_share_bt">Share</string>
+    <string name="item_details_bt">DETAILS</string>
+    <string name="item_share_bt">SHARE</string>
 </resources>
