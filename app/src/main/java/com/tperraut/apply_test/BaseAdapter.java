@@ -1,54 +1,61 @@
 package com.tperraut.apply_test;
 
-import android.graphics.drawable.Drawable;
+import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
-import android.support.v7.widget.CardView;
+import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class BaseAdapter extends RecyclerView.Adapter<BaseAdapter.ViewHolder> {
-
-    private ArrayList<String> mTitles;
-    private ArrayList<String> mDescriptions;
-    private ArrayList<Drawable> mImages;
-
     private Listener mListener;
+    private List<Model> mDataSet;
 
-    public BaseAdapter( Listener listener,
-                        ArrayList<String> titles,
-                        ArrayList<String> descriptions,
-                        ArrayList<Drawable> images) {
-        this.mTitles = titles;
-        this.mDescriptions = descriptions;
+    public BaseAdapter(Listener listener) {
         this.mListener = listener;
-        this.mImages = images;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
+        private Model mModel;
+
         @BindView(R.id.item_image)
         ImageView mImage;
         @BindView(R.id.item_title)
         TextView mTitle;
         @BindView(R.id.item_description)
         TextView mDescription;
-        @BindView(R.id.item_details_bt)
-        TextView mDetailsBt;
-        @BindView(R.id.item_share_bt)
-        TextView mShareBt;
 
         public ViewHolder(View v) {
             super(v);
             ButterKnife.bind(this, v);
+        }
+
+        @OnClick(R.id.item_details_bt)
+        void onDetailsRequested() {
+            if (mListener != null) {
+                mListener.onDetailsRequested(mModel);
+            }
+        }
+
+        @OnClick(R.id.item_share_bt)
+        void onShareRequested() {
+            if (mListener != null) {
+                mListener.onShareRequested(mModel);
+            }
+        }
+
+        public void setModel(Model model) {
+            this.mModel = model;
         }
     }
 
@@ -56,27 +63,49 @@ public class BaseAdapter extends RecyclerView.Adapter<BaseAdapter.ViewHolder> {
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.item_view, parent, false);
-        ViewHolder vh = new ViewHolder(v);
-        return vh;
+                .inflate(R.layout.item_view, parent, false);
+        return new ViewHolder(v);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.mTitle.setText(mTitles.get(position));
-        holder.mDescription.setText(mDescriptions.get(position));
-        //holder.mImage.setImageDrawable(mImages.get(position));
-        holder.mDetailsBt.setOnClickListener(mListener);
-        holder.mShareBt.setOnClickListener(mListener);
+        Model data = mDataSet.get(position);
+        holder.mTitle.setText(data.getTitleRes());
+        holder.mDescription.setText(data.getDescriptionRes());
+        holder.mImage.setImageResource(data.getImageRes());
+        holder.setModel(data);
     }
 
     @Override
     public int getItemCount() {
-        return mTitles.size();
+        if (mDataSet != null)
+            return mDataSet.size();
+        return 0;
     }
 
-    public interface Listener extends View.OnClickListener{
-        @Override
-        void onClick(View view);
+    public void setDataSet(@Nullable List<Model> dataSet) {
+        this.mDataSet = dataSet;
+    }
+
+    public void addItem(@StringRes int titleRes,
+                        @StringRes int descriptionRes,
+                        @DrawableRes int imageRes) {
+        if (mDataSet != null) {
+            mDataSet.add(0, new Model(titleRes, descriptionRes, imageRes));
+            notifyItemInserted(0);
+        }
+    }
+
+    public void removeItem() {
+        if (mDataSet != null && !mDataSet.isEmpty()) {
+            mDataSet.remove(0);
+            notifyItemRemoved(0);
+        }
+    }
+
+    public interface Listener {
+        void onDetailsRequested(Model m);
+
+        void onShareRequested(Model m);
     }
 }

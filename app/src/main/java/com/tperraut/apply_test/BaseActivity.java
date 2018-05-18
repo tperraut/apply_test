@@ -1,6 +1,6 @@
 package com.tperraut.apply_test;
 
-import android.graphics.drawable.Drawable;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -8,17 +8,16 @@ import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
+import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class BaseActivity extends AppCompatActivity implements BaseAdapter.Listener{
     private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
+    private BaseAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
-    private ArrayList<String> mTitles = new ArrayList<>();
-    private ArrayList<String> mDescritpions = new ArrayList<>();
-    private ArrayList<Drawable> mImages = new ArrayList<>();
+    private List<Model> mDataSet;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,16 +27,16 @@ public class BaseActivity extends AppCompatActivity implements BaseAdapter.Liste
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
         initDataSet();
-        mAdapter = new BaseAdapter(this, mTitles, mDescritpions, mImages);
+        mAdapter = new BaseAdapter(this);
+        mAdapter.setDataSet(mDataSet);
         mRecyclerView.setAdapter(mAdapter);
     }
 
     private void initDataSet() {
-        for (int i = 1; i <= 10; i ++) {
-            mTitles.add("" + i);
-            mDescritpions.add("" + i);
-            //mImages.add(getDrawable(R.drawable.geronimo_logo));
-        }
+        mDataSet = new ArrayList<>();
+        mDataSet.add(new Model(R.string.item1_title, R.string.item1_description, R.drawable.geronimo));
+        mDataSet.add(new Model(R.string.item_title, R.string.item_description, R.drawable.geronimo_logo));
+        mDataSet.add(new Model(R.string.item1_title, R.string.item1_description, R.drawable.geronimo));
     }
 
     @Override
@@ -51,11 +50,12 @@ public class BaseActivity extends AppCompatActivity implements BaseAdapter.Liste
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.add_item_bt:
-                //add item
+                mAdapter.addItem(R.string.item_title, R.string.item_description, R.drawable.geronimo);
+                mRecyclerView.smoothScrollToPosition(0);
                 return true;
 
             case R.id.remove_item_bt:
-                //remove item
+                mAdapter.removeItem();
                 return true;
 
             default:
@@ -63,8 +63,21 @@ public class BaseActivity extends AppCompatActivity implements BaseAdapter.Liste
         }
     }
 
-    @Override
-    public void onClick(View view) {
-        System.out.println(view);
+    public void onShareRequested(Model m) {
+        Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+        sharingIntent.setType("text/plain");
+        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, m.getTitleRes());
+        startActivity(
+                Intent.createChooser(sharingIntent, getResources().getString(R.string.share_text))
+        );
     }
+
+    public void onDetailsRequested(Model m) {
+        Toast.makeText(
+                getApplicationContext(),
+                m.getTitleRes(),
+                Toast.LENGTH_SHORT
+        ).show();
+    }
+
 }

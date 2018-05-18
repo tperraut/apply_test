@@ -7,4 +7,7 @@
     <string name="item_image_description">Nice pic</string>
     <string name="item_details_bt">DETAILS</string>
     <string name="item_share_bt">SHARE</string>
+    <string name="share_text">Share with</string>
+    <string name="item1_title">Geronimo Agency</string>
+    <string name="item1_description">Here we are</string>
 </resources>
