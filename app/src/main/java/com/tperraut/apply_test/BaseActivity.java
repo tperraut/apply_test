@@ -11,32 +11,29 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class BaseActivity extends AppCompatActivity implements BaseAdapter.Listener{
     private RecyclerView mRecyclerView;
     private BaseAdapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
-    private List<Model> mDataSet;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_base);
         mRecyclerView = findViewById(R.id.item_list);
-        mLayoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        initDataSet();
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(layoutManager);
         mAdapter = new BaseAdapter(this);
-        mAdapter.setDataSet(mDataSet);
+        mAdapter.setDataSet(initDataSet());
         mRecyclerView.setAdapter(mAdapter);
     }
 
-    private void initDataSet() {
-        mDataSet = new ArrayList<>();
-        mDataSet.add(new Model(R.string.item1_title, R.string.item1_description, R.drawable.geronimo));
-        mDataSet.add(new Model(R.string.item_title, R.string.item_description, R.drawable.geronimo_logo));
-        mDataSet.add(new Model(R.string.item1_title, R.string.item1_description, R.drawable.geronimo));
+    private ArrayList<Model> initDataSet() {
+        ArrayList<Model> dataSet = new ArrayList<>();
+        dataSet.add(new Model(R.string.item1_title, R.string.item1_description, R.drawable.geronimo));
+        dataSet.add(new Model(R.string.item_title, R.string.item_description, R.drawable.geronimo_logo));
+        dataSet.add(new Model(R.string.item1_title, R.string.item1_description, R.drawable.geronimo));
+        return dataSet;
     }
 
     @Override
@@ -63,6 +60,7 @@ public class BaseActivity extends AppCompatActivity implements BaseAdapter.Liste
         }
     }
 
+    @Override
     public void onShareRequested(Model m) {
         Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
         sharingIntent.setType("text/plain");
@@ -72,6 +70,7 @@ public class BaseActivity extends AppCompatActivity implements BaseAdapter.Liste
         );
     }
 
+    @Override
     public void onDetailsRequested(Model m) {
         Toast.makeText(
                 getApplicationContext(),

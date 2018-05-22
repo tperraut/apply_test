@@ -105,7 +105,6 @@ public class BaseAdapter extends RecyclerView.Adapter<BaseAdapter.ViewHolder> {
 
     public interface Listener {
         void onDetailsRequested(Model m);
-
         void onShareRequested(Model m);
     }
 }
